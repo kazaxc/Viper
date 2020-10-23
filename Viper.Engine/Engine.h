@@ -5,6 +5,7 @@
 namespace Viper {
 
 	class Platform;
+	class VulkanRenderer;
 
 	class Engine {
 
@@ -18,6 +19,7 @@ namespace Viper {
 
 	private:
 		Platform* _platform;
+		VulkanRenderer* _renderer;
 	};
 
 }

@@ -1,14 +1,16 @@
 #pragma once
 
 #include "Types.h"
+#include "Platform.h"
 
 #include <vulkan/vulkan.h>
 
 namespace Viper {
 
+	class Platform;
+
 	class VulkanRenderer {
 
-		class Platform;
 
 	public:
 		VulkanRenderer(Platform* platform);
