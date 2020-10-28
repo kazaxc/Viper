@@ -105,6 +105,8 @@ namespace Viper {
 		PFN_vkCreateDebugUtilsMessengerEXT func = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(_instance, "vkCreateDebugUtilsMessengerEXT");
 		ASSERT_MSG(func, "Failed to create debug messenger!");
 		func(_instance, &debugCreateInfo, nullptr, &_debugMessenger);
+
+		_platform->CreateSurface(_instance, &_surface);
 	}
 
 	VulkanRenderer::~VulkanRenderer() {
@@ -116,6 +118,30 @@ namespace Viper {
 		}
 
 		vkDestroyInstance(_instance, nullptr);
+	}
+
+	VkPhysicalDevice VulkanRenderer::SelectPhysicalDevice() {
+		U32 deviceCount = 0;
+		vkEnumeratePhysicalDevices(_instance, &deviceCount, nullptr);
+		if (deviceCount == 0)
+		{
+			Logger::Fatal("No supported physical devices were found!");
+		}
+		std::vector<VkPhysicalDevice> devices(deviceCount);
+		vkEnumeratePhysicalDevices(_instance, &deviceCount, devices.data());
+
+		for (U32 i = 0; i < deviceCount; ++i) {
+			if (physicalDeviceMeetsRequirements(devices[i])) {
+				return devices[i];
+			}
+		}
+
+		Logger::Fatal("No devices found that meet application requirements");
+		return nullptr;
+	}
+
+	const bool VulkanRenderer::physicalDeviceMeetsRequirements(VkPhysicalDevice physicalDevice) {
+
 	}
 
 }
